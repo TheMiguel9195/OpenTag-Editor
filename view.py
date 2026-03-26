@@ -7,6 +7,7 @@ view.py file for project OpenTag Editor
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QAction, QLineEdit, QGridLayout, QLabel, QPushButton, QFileDialog
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 import sys
 
 class MainWindow(QMainWindow):
@@ -132,13 +133,45 @@ class MainWindow(QMainWindow):
 
 
     def open_music(self):
+
         print("llamada a abrir pista, OpenTag Editor")
 
-        
         file_path, _ = QFileDialog.getOpenFileName(self, "Seleccionar Pista", "", "Audio format (*.mp3 *.flac)")
 
         if file_path and self.controller:
-            self.controller.open_music_controller() #Llamada a open_music_controller
+            self.controller.open_music_controller(file_path) #Llamada a open_music_controller
+
+    def load_metadata(self, metadata):
+
+        #mostramos la informacion en la vista
+
+        self.artist_input.setText(metadata["artist"])
+        self.title_input.setText(metadata["title"])
+        self.album_input.setText(metadata["album"])
+        self.track_input.setText(metadata["track"])
+
+        #mostramos caratula si la tiene
+
+        if metadata["cover"]:
+
+            pixmap = QPixmap()
+            pixmap.loadFromData(metadata["cover"])
+            pixmap = pixmap.scaled(250, 250, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.cover_preview.setPixmap(pixmap)
+
+        else:
+
+            self.cover_preview.setText("No cover loaded")
+
+        #habilitamos los campos para poder editar los metadatos ahora que ya estan cargados
+
+        self.artist_input.setEnabled(True)
+        self.title_input.setEnabled(True)
+        self.album_input.setEnabled(True)
+        self.track_input.setEnabled(True)
+
+        self.cover_button.setEnabled(True)
+        self.save_button.setEnabled(True)
 
 
     def close_app(self):
