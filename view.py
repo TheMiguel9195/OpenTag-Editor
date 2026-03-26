@@ -5,7 +5,7 @@ Date: 12 March 2026
 view.py file for project OpenTag Editor
 """
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QAction, QLineEdit, QGridLayout, QLabel, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QAction, QLineEdit, QGridLayout, QLabel, QPushButton, QFileDialog
 from PyQt5.QtCore import Qt
 import sys
 
@@ -18,6 +18,9 @@ class MainWindow(QMainWindow):
 
         #Window Size
         self.setGeometry(100, 100, 800, 800)
+
+        #inicializar controller
+        self.controller = None
 
 
 
@@ -130,6 +133,13 @@ class MainWindow(QMainWindow):
 
     def open_music(self):
         print("llamada a abrir pista, OpenTag Editor")
+
+        
+        file_path, _ = QFileDialog.getOpenFileName(self, "Seleccionar Pista", "", "Audio format (*.mp3 *.flac)")
+
+        if file_path and self.controller:
+            self.controller.open_music_controller() #Llamada a open_music_controller
+
 
     def close_app(self):
         self.close() #cerramos el programa
