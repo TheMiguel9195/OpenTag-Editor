@@ -23,6 +23,9 @@ class MainWindow(QMainWindow):
         #inicializar controller
         self.controller = None
 
+        #bytes de el cover de la cancion abierta
+        self.raw_cover_data = None
+
 
 
         # SUPERIOR BAR MENU---------------------------------------------------------
@@ -78,6 +81,18 @@ class MainWindow(QMainWindow):
         self.track_input = QLineEdit()
         track_label.setAlignment(Qt.AlignCenter)
 
+        date_label = QLabel("Fecha:")
+        self.date_input = QLineEdit()
+        date_label.setAlignment(Qt.AlignCenter)
+
+        genre_label = QLabel("Género:")
+        self.genre_input = QLineEdit()
+        genre_label.setAlignment(Qt.AlignCenter)
+
+        comment_label = QLabel("Comentario:")
+        self.comment_input = QLineEdit()
+        comment_label.setAlignment(Qt.AlignCenter)
+
         self.cover_button = QPushButton("Cambiar carátula")
         self.cover_button.clicked.connect(self.modify_cover)
 
@@ -104,9 +119,18 @@ class MainWindow(QMainWindow):
         grid.addWidget(track_label, 3, 0)
         grid.addWidget(self.track_input, 3, 1)
 
-        grid.addWidget(self.cover_button, 4, 0)
+        grid.addWidget(date_label, 4, 0)
+        grid.addWidget(self.date_input, 4, 1)
 
-        grid.addWidget(self.save_button, 5, 0)
+        grid.addWidget(genre_label, 5, 0)
+        grid.addWidget(self.genre_input, 5, 1)
+
+        grid.addWidget(comment_label, 6, 0)
+        grid.addWidget(self.comment_input, 6, 1)
+
+        grid.addWidget(self.cover_button, 7, 0)
+
+        grid.addWidget(self.save_button, 8, 0)
 
 
         grid.setVerticalSpacing(20)
@@ -125,6 +149,9 @@ class MainWindow(QMainWindow):
         self.title_input.setEnabled(False)
         self.album_input.setEnabled(False)
         self.track_input.setEnabled(False)
+        self.date_input.setEnabled(False)
+        self.genre_input.setEnabled(False)
+        self.comment_input.setEnabled(False)
 
         self.cover_button.setEnabled(False)
         self.save_button.setEnabled(False)
@@ -138,7 +165,7 @@ class MainWindow(QMainWindow):
 
         file_path, _ = QFileDialog.getOpenFileName(self, "Seleccionar Pista", "", "Audio format (*.mp3 *.flac)")
 
-        if file_path and self.controller:
+        if file_path and self.controller: #comprobamos que se tenga acceso al controller desde el view, deberiamos tenerlo porque se realiza en el main en la ejecucion del programa
             self.controller.open_music_controller(file_path) #Llamada a open_music_controller
 
     def load_metadata(self, metadata):
@@ -149,10 +176,15 @@ class MainWindow(QMainWindow):
         self.title_input.setText(metadata["title"])
         self.album_input.setText(metadata["album"])
         self.track_input.setText(metadata["track"])
+        self.date_input.setText(metadata["date"])
+        self.genre_input.setText(metadata["genre"])
+        self.comment_input.setText(metadata["comment"])
 
         #mostramos caratula si la tiene
 
         if metadata["cover"]:
+
+            self.raw_cover_data = metadata["cover"] #guardamos raw bytes de la imagen
 
             pixmap = QPixmap()
             pixmap.loadFromData(metadata["cover"])
@@ -169,6 +201,9 @@ class MainWindow(QMainWindow):
         self.title_input.setEnabled(True)
         self.album_input.setEnabled(True)
         self.track_input.setEnabled(True)
+        self.date_input.setEnabled(True)
+        self.genre_input.setEnabled(True)
+        self.comment_input.setEnabled(True)
 
         self.cover_button.setEnabled(True)
         self.save_button.setEnabled(True)
@@ -178,7 +213,37 @@ class MainWindow(QMainWindow):
         self.close() #cerramos el programa
 
     def save_data(self):
+
         print("llamada a guardar datos")
+
+        metadata = { #estructura metadata que contiene los campos que queremos guardar para llevarlo al model y guardar en el respectivo fichero
+
+            "title": "",
+            "artist": "",
+            "album": "",
+            "track": "",
+            "cover": None, #bytes de la imagen
+            "date": "",
+            "genre": "",
+            "comment": ""
+
+        }
+
+        metadata["title"] = self.title_input.text()
+        metadata["artist"] = self.artist_input.text()
+        metadata["album"] = self.album_input.text()
+        metadata["track"] = self.track_input.text()
+        metadata["date"] = self.date_input.text()
+        metadata["genre"] = self.genre_input.text()
+        metadata["comment"] = self.comment_input.text()
+        
+        if self.cover_preview.text() != "No cover loaded":
+            metadata["cover"] = self.raw_cover_data #en caso de haber cambiado imagen seran los bytes de la nueva imagen y no la caratula original // en caso contrario se guarda exactamente los datos de la caratula original
+
+        self.controller.save_data_controller(metadata) #pasamos toda la info al controller
+
+
+
 
     def modify_cover(self):
         print("llamada a cambiar carátula")

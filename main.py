@@ -16,20 +16,13 @@ if __name__ == "__main__":
     app = QApplication(sys.argv) #inicializamos PyQt5
 
     view = MainWindow() #creamos instancia de la ventana que se encuentra en view.py
-    controller = Controller()
-    model = Model()
+    controller = Controller() #instancia de Controller
+    model = Model() #instancia de Model
 
-    view.controller = controller
-    controller.model = model
-    controller.view = view
+    view.controller = controller #permitimos el acceso del view al controller para llamar funciones
+    controller.model = model #acceso del controller para llamar funciones del model
+    controller.view = view #acceso del controller para llamar funciones del view
 
     view.show() #mostramos la ventana
-    """
-    controller = Controller(view) #inicializamos el controller
-    view.controller = controller #instancia del controller en el view para poder realizar llamadas
-
-    model = Model(controller) #inicializamos el model
-    controller.model = model #instanciamos el model en el controller para poder realizar llamadas
-    """
     
     sys.exit(app.exec())
