@@ -248,6 +248,20 @@ class MainWindow(QMainWindow):
     def modify_cover(self):
         print("llamada a cambiar carátula")
 
+        new_cover_path, _ = QFileDialog.getOpenFileName(self, "Seleccionar Carátula", "", "Image format (*.jpg *.jpeg *.png)") #seleccionamos la imagen nueva para carátula
+
+        #abrimos la imagen
+        if new_cover_path:
+
+            with open(new_cover_path, "rb") as f:
+
+                self.raw_cover_data = f.read() #guardamos los bytes de la nueva imagen en nuestra variable raw_cover_data
+
+            pixmap = QPixmap() #creamos pixmap de la nueva imagen y lo mostramos en cover_preview para enseñar la nueva caratula antes de guardar
+            pixmap.loadFromData(self.raw_cover_data)
+            pixmap = pixmap.scaled(250, 250, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.cover_preview.setPixmap(pixmap)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

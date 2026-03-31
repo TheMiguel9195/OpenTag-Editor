@@ -11,9 +11,9 @@ from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TRCK, TDRC, TCON, COMM
 
 class Model:
 
-    def __init__(self): #CONSTRUCTOR VACIO
+    def __init__(self):
 
-        self.comment_key = None
+        self.comment_key = None #Guarda exactamente en cual COMM:xxx esta el comentario para poder reescribir el mismo comentario (esto es solo para ficheros .mp3)
 
     def read_metadata(self, file_path): #funcion que obtendra los metadatos del fichero del file_path
 
@@ -93,18 +93,18 @@ class Model:
             if audio.tags is None:
                 audio.add_tags()
             
-            audio.tags["TIT2"] = TIT2(encoding=3, text=metadata["title"])
-            audio.tags["TPE1"] = TPE1(encoding=3, text=metadata["artist"])
-            audio.tags["TALB"] = TALB(encoding=3, text=metadata["album"])
-            audio.tags["TRCK"] = TRCK(encoding=3, text=metadata["track"])
-            audio.tags["TDRC"] = TDRC(encoding=3, text=metadata["date"])
-            audio.tags["TCON"] = TCON(encoding=3, text=metadata["genre"])
+            audio.tags["TIT2"] = TIT2(encoding = 3, text = metadata["title"])
+            audio.tags["TPE1"] = TPE1(encoding = 3, text = metadata["artist"])
+            audio.tags["TALB"] = TALB(encoding = 3, text = metadata["album"])
+            audio.tags["TRCK"] = TRCK(encoding = 3, text = metadata["track"])
+            audio.tags["TDRC"] = TDRC(encoding = 3, text = metadata["date"])
+            audio.tags["TCON"] = TCON(encoding = 3, text = metadata["genre"])
 
             if self.comment_key: #FORMATO DE LA comment_key COMM:desc:lang
 
                 parts = self.comment_key.split(":")
 
-                if len(parts) == 2:
+                if len(parts) == 3:
 
                     lang = parts[2]
                     desc = parts[1]
@@ -114,13 +114,15 @@ class Model:
                     lang = "eng"
                     desc = ""
             
-            audio.tags["COMM"] = COMM(encoding=3, lang = lang, desc = desc, text=metadata["comment"])
+            audio.tags["COMM"] = COMM(encoding = 3, lang = lang, desc = desc, text = metadata["comment"])
 
             if metadata["cover"]: #guardamos los bytes de la imagen de la caratula
 
+                audio.tags.delall("APIC") #borramos carátulas existentes
+
                 mime = self.get_mime_type(metadata["cover"])
 
-                audio.tags["APIC"] = APIC(encoding=3, mime=mime, type=3, desc="Cover", data=metadata["cover"])
+                audio.tags["APIC:Cover"] = APIC(encoding = 3, mime = mime, type = 3, desc = "Cover", data = metadata["cover"])
             
             audio.save()
 
@@ -150,7 +152,7 @@ class Model:
 
     def get_mime_type(self, image_bytes): #detecta si la caratula a guardar es JPEG, JPG o PNG
 
-        if image_bytes[:3] == b'\xff\xd8\xff':  # cabecera JPEG
+        if image_bytes[:3] == b'\xff\xd8\xff':  # cabecera JPEG/JPG
 
             return "image/jpeg"
         
