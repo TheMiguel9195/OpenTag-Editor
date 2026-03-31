@@ -7,7 +7,7 @@ view.py file for project OpenTag Editor
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QAction, QLineEdit, QGridLayout, QLabel, QPushButton, QFileDialog
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QIcon
 import sys
 
 class MainWindow(QMainWindow):
@@ -19,6 +19,9 @@ class MainWindow(QMainWindow):
 
         #Window Size
         self.setGeometry(100, 100, 800, 800)
+
+        #Application Icon
+        self.setWindowIcon(QIcon("./assets/AppIcon.png"))
 
         #inicializar controller
         self.controller = None
