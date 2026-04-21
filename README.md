@@ -8,4 +8,5 @@ Project that makes the user able to edit their audio file's tags in order to per
 
 
 This project is licensed under the GNU GPL v3.
+
 See LICENSE file for full details.
