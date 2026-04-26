@@ -99,6 +99,10 @@ class Model:
             audio.tags["TRCK"] = TRCK(encoding = 3, text = metadata["track"])
             audio.tags["TDRC"] = TDRC(encoding = 3, text = metadata["date"])
             audio.tags["TCON"] = TCON(encoding = 3, text = metadata["genre"])
+            
+            #EN CASO DE QUE NO HAYA NINGUN COMENTARIO INICIALIZAMOS lang y desc para poder guardar el comentario
+            lang = "eng"
+            desc = ""
 
             if self.comment_key: #FORMATO DE LA comment_key COMM:desc:lang
 
@@ -108,11 +112,6 @@ class Model:
 
                     lang = parts[2]
                     desc = parts[1]
-
-                else:
-
-                    lang = "eng"
-                    desc = ""
             
             audio.tags["COMM"] = COMM(encoding = 3, lang = lang, desc = desc, text = metadata["comment"])
 
