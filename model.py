@@ -8,6 +8,7 @@ model.py file for project OpenTag Editor
 from mutagen.mp3 import MP3
 from mutagen.flac import FLAC, Picture
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TRCK, TDRC, TCON, COMM
+from mutagen import MutagenError
 
 class Model:
 
@@ -123,7 +124,19 @@ class Model:
 
                 audio.tags["APIC:Cover"] = APIC(encoding = 3, mime = mime, type = 3, desc = "Cover", data = metadata["cover"])
             
-            audio.save()
+            try: # bloque try/except para controlar en caso de error el comportamiento del programa
+            
+                audio.save()
+
+            except MutagenError as e:
+
+                return False
+            
+            except Exception as e:
+
+                return False
+
+            return True
 
         elif current_file_path.endswith(".flac"):
 
@@ -147,7 +160,19 @@ class Model:
                 audio.clear_pictures()
                 audio.add_picture(pic)
 
-            audio.save()
+            try: # bloque try/except para controlar en caso de error el comportamiento del programa
+            
+                audio.save()
+
+            except MutagenError as e:
+
+                return False
+            
+            except Exception as e:
+
+                return False
+
+            return True
 
     def get_mime_type(self, image_bytes): #detecta si la caratula a guardar es JPEG, JPG o PNG
 

@@ -27,8 +27,11 @@ class Controller:
 
         #print("Llamada a save_data_controller recibida")
 
+        bool ; correcto = False #para recoger el resultado de la funcion de guardado
+
         if metadata and self.current_file_path:
 
-            self.model.save_data_model(metadata, self.current_file_path) #pasamos donde se encuentra el fichero cuyos datos van a ser modificados y pasamos los nuevos datos
-        
+            correcto = self.model.save_data_model(metadata, self.current_file_path) #pasamos donde se encuentra el fichero cuyos datos van a ser modificados y pasamos los nuevos datos
+
+        return correcto        
         

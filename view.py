@@ -5,7 +5,7 @@ Date: 12 March 2026
 view.py file for project OpenTag Editor
 """
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QAction, QLineEdit, QGridLayout, QLabel, QPushButton, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QAction, QLineEdit, QGridLayout, QLabel, QPushButton, QFileDialog, QMessageBox
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
 import sys
@@ -243,7 +243,17 @@ class MainWindow(QMainWindow):
         if self.cover_preview.text() != "No cover loaded":
             metadata["cover"] = self.raw_cover_data #en caso de haber cambiado imagen seran los bytes de la nueva imagen y no la caratula original // en caso contrario se guarda exactamente los datos de la caratula original
 
-        self.controller.save_data_controller(metadata) #pasamos toda la info al controller
+        bool ; correcto = False#variable para comprobar si se guardo correctamente
+
+        correcto = self.controller.save_data_controller(metadata) #pasamos toda la info al controller
+
+        if correcto == True:
+
+            messageBox_exito()
+
+        else:
+
+            messageBox_error()
 
 
 
@@ -265,6 +275,25 @@ class MainWindow(QMainWindow):
             pixmap.loadFromData(self.raw_cover_data)
             pixmap = pixmap.scaled(250, 250, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.cover_preview.setPixmap(pixmap)
+
+
+def messageBox_exito():
+
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Information)
+    msg.setWindowTitle("Éxito")
+    msg.setText("Los metadatos se han almacenado correctamente")
+    msg.setStandardButtons(QMessageBox.Ok)
+    msg.exec_()
+
+def messageBox_error():
+
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Critical)
+    msg.setWindowTitle("Error")
+    msg.setText("Se ha producido un error al guardar los metadatos del fichero")
+    msg.setStandardButtons(QMessageBox.Ok)
+    msg.exec_()
 
 
 if __name__ == "__main__":
