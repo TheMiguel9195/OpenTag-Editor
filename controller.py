@@ -15,7 +15,7 @@ class Controller:
 
     def open_music_controller(self, file_path):
 
-        print("Llamada a open_music_controller recibida, La ruta recibida donde se encuentra el fichero es: " + file_path)
+        #print("Llamada a open_music_controller recibida, La ruta recibida donde se encuentra el fichero es: " + file_path)
 
         self.current_file_path = file_path #guardamos el file path para poder usarlo cuando sea necesario
 
@@ -25,7 +25,7 @@ class Controller:
 
     def save_data_controller(self, metadata):
 
-        print("Llamada a save_data_controller recibida")
+        #print("Llamada a save_data_controller recibida")
 
         if metadata and self.current_file_path:
 

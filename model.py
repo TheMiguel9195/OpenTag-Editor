@@ -17,7 +17,7 @@ class Model:
 
     def read_metadata(self, file_path): #funcion que obtendra los metadatos del fichero del file_path
 
-        print("Llamada a read_metadata con file_path: " + file_path)
+        #print("Llamada a read_metadata con file_path: " + file_path)
 
         metadata = { #estructura metadata que contiene los campos que queremos obtener
 
@@ -82,7 +82,7 @@ class Model:
     
     def save_data_model(self, metadata, current_file_path):
 
-        print("Llamada recibida a save_data_model con " + current_file_path)
+        #print("Llamada recibida a save_data_model con " + current_file_path)
 
         #identificamos segun el path si el fichero es .mp3 o .flac para distinguir su guardado y finalmente guardamos la informacion
 

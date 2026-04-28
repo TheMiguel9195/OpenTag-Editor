@@ -164,7 +164,7 @@ class MainWindow(QMainWindow):
 
     def open_music(self):
 
-        print("llamada a abrir pista, OpenTag Editor")
+        #print("llamada a abrir pista, OpenTag Editor")
 
         file_path, _ = QFileDialog.getOpenFileName(self, "Seleccionar Pista", "", "Audio format (*.mp3 *.flac)")
 
@@ -217,7 +217,7 @@ class MainWindow(QMainWindow):
 
     def save_data(self):
 
-        print("llamada a guardar datos")
+        #print("llamada a guardar datos")
 
         metadata = { #estructura metadata que contiene los campos que queremos guardar para llevarlo al model y guardar en el respectivo fichero
 
@@ -249,7 +249,8 @@ class MainWindow(QMainWindow):
 
 
     def modify_cover(self):
-        print("llamada a cambiar carátula")
+
+        #print("llamada a cambiar carátula")
 
         new_cover_path, _ = QFileDialog.getOpenFileName(self, "Seleccionar Carátula", "", "Image format (*.jpg *.jpeg *.png)") #seleccionamos la imagen nueva para carátula
 
